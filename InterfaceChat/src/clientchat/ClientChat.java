@@ -38,7 +38,7 @@ public class ClientChat extends javax.swing.JFrame {
     public ClientChat(String username) throws IOException {
         initComponents();
 
-        ClientChat.oClient = new Client(username, new Random().nextInt(Integer.MAX_VALUE));
+        ClientChat.oClient = new Client(username, getIdByName(username));
         
         System.out.println("Logado como: " + username);
         lblUsername.setText(username);
@@ -232,6 +232,15 @@ public class ClientChat extends javax.swing.JFrame {
             
             
         }.start();
+    }
+   
+    private static int getIdByName(String usr) {
+        int answer = 0;
+        
+        for(int i = 0; i < usr.length(); i++)
+            answer += Character.getNumericValue(usr.charAt(i));
+        
+        return answer;
     }
     /**
      * @param args the command line arguments

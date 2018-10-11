@@ -17,12 +17,21 @@ import java.util.Date;
 public class Testes {
    
     public static void main(String args[]) {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-	Date date = new Date();
-	System.out.println(dateFormat.format(date));
+        String str = "ViniciusLucena";
+        int id = getIdByName(str);
+        
+       
 
     }
 
+    private static int getIdByName(String usr) {
+        int answer = 0;
+        
+        for(int i = 0; i < usr.length(); i++)
+            answer += Character.getNumericValue(usr.charAt(i));
+        
+        return answer;
+    }
     
     
 }
