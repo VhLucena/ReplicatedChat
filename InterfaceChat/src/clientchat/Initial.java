@@ -80,8 +80,6 @@ public class Initial extends javax.swing.JFrame {
         getContentPane().add(lblBackground);
         lblBackground.setBounds(0, 0, 512, 301);
 
-        getAccessibleContext().setAccessibleName("Replicated Chat");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 

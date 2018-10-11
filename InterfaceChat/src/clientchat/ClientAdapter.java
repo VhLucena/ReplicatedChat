@@ -35,7 +35,7 @@ import javax.swing.JTextField;
  * 
  * @author alysson
  */
-public class Client {
+public class ClientAdapter {
     private static int MSG_SIZE = 10;
     private static int BUF_SIZE = 4096;
     private static String name;
@@ -44,11 +44,11 @@ public class Client {
 
 
 
-    public Client (String username, int idClient) throws IOException {
-        Client.name = username;
-        Client.idClient = idClient;
+    public ClientAdapter (String username, int idClient) throws IOException {
+        ClientAdapter.name = username;
+        ClientAdapter.idClient = idClient;
   
-        Client.counterProxy = new ServiceProxy(idClient);
+        ClientAdapter.counterProxy = new ServiceProxy(idClient);
       
     }
     
@@ -63,18 +63,18 @@ public class Client {
         try {
             String currentTime = getCurrentTime();
             // FORMATO DA MENSAGEM: [send#(8:55) nomeCliente: mensagem]
-            String newPackage = "send#"+ currentTime + "#" + Client.name + "#" + newMessage;
+            String newPackage = "send#"+ currentTime + "#" + ClientAdapter.name + "#" + newMessage;
             
             byte[] out = convertStringToByteArray(newPackage);
 
-            byte[] reply = Client.counterProxy.invokeOrdered(out); 
+            byte[] reply = ClientAdapter.counterProxy.invokeOrdered(out); 
 
             if(reply == null)   
                 return "Erro no envio da mensagem";
 
             return "OK";
         } catch(IOException | NumberFormatException e) {
-            Client.counterProxy.close();
+            ClientAdapter.counterProxy.close();
         }
         return null;
     }
@@ -84,7 +84,7 @@ public class Client {
         
         byte[] out = convertStringToByteArray(newPackage);
         
-        byte[] reply = Client.counterProxy.invokeOrdered(out); 
+        byte[] reply = ClientAdapter.counterProxy.invokeOrdered(out); 
         
         String replyString = convertByteArrayToString(reply);
                 
@@ -96,7 +96,7 @@ public class Client {
         
         byte[] out = convertStringToByteArray(newPackage);
         
-        byte[] reply = Client.counterProxy.invokeOrdered(out); 
+        byte[] reply = ClientAdapter.counterProxy.invokeOrdered(out); 
         
         String replyString = convertByteArrayToString(reply);
         
@@ -108,7 +108,7 @@ public class Client {
         
         byte[] out = convertStringToByteArray(newPackage);
         
-        byte[] reply = Client.counterProxy.invokeOrdered(out); 
+        byte[] reply = ClientAdapter.counterProxy.invokeOrdered(out); 
         
         String replyString = convertByteArrayToString(reply);
         
@@ -126,7 +126,7 @@ public class Client {
     }
     
     private byte[] convertStringToByteArray(String stringValue) throws IOException{
-        ByteArrayOutputStream out = new ByteArrayOutputStream(Client.BUF_SIZE);
+        ByteArrayOutputStream out = new ByteArrayOutputStream(ClientAdapter.BUF_SIZE);
         new DataOutputStream(out).writeUTF(stringValue);
         
         return out.toByteArray();

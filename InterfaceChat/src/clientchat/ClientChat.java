@@ -30,7 +30,7 @@ import javax.swing.SwingConstants;
  */
 public class ClientChat extends javax.swing.JFrame {
 
-    private static Client oClient;
+    private static ClientAdapter oClient;
 
     /**
      * Creates new form NewJFrame
@@ -38,7 +38,7 @@ public class ClientChat extends javax.swing.JFrame {
     public ClientChat(String username) throws IOException {
         initComponents();
 
-        ClientChat.oClient = new Client(username, getIdByName(username));
+        ClientChat.oClient = new ClientAdapter(username, getIdByName(username));
         
         System.out.println("Logado como: " + username);
         lblUsername.setText(username);
