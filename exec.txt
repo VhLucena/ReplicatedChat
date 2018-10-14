@@ -1,0 +1,3 @@
+runscripts/smartrun.sh chat.Server <id>
+
+runscripts/smartrun.sh clientchat.Initial

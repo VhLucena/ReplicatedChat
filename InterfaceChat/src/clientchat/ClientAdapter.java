@@ -49,7 +49,6 @@ public class ClientAdapter {
         ClientAdapter.idClient = idClient;
   
         ClientAdapter.counterProxy = new ServiceProxy(idClient);
-      
     }
     
     
@@ -59,10 +58,10 @@ public class ClientAdapter {
      * @param newMessage: String that save a new message to send
      * @return Server reply 
      */
-    public String sendMessage(String newMessage) throws IOException {
+    public synchronized String sendMessage(String newMessage) throws IOException {
         try {
             String currentTime = getCurrentTime();
-            // FORMATO DA MENSAGEM: [send#(8:55) nomeCliente: mensagem]
+            // FORMATO DA MENSAGEM: [send#8:55:30#nomeCliente#mensagem]
             String newPackage = "send#"+ currentTime + "#" + ClientAdapter.name + "#" + newMessage;
             
             byte[] out = convertStringToByteArray(newPackage);
@@ -79,8 +78,9 @@ public class ClientAdapter {
         return null;
     }
     
-    public String getMessages() throws IOException {
-        String newPackage = "history";
+    public synchronized String getMessages() throws IOException {
+        // FORMATO DA MENSAGE: history#-#Vinicius#-
+        String newPackage = "history#-#" + ClientAdapter.name + "#-";
         
         byte[] out = convertStringToByteArray(newPackage);
         
@@ -91,8 +91,9 @@ public class ClientAdapter {
         return replyString;
     }
     
-    public String getUsers() throws IOException {
-         String newPackage = "users";
+    public synchronized String getUsers() throws IOException {
+        // FORMATO DA MENSAGE: users#-#Vinicius#-
+        String newPackage = "users#-# " + ClientAdapter.name + "#-";
         
         byte[] out = convertStringToByteArray(newPackage);
         
@@ -103,17 +104,6 @@ public class ClientAdapter {
         return replyString;
     }
     
-    public String getServers() throws IOException {
-         String newPackage = "servers";
-        
-        byte[] out = convertStringToByteArray(newPackage);
-        
-        byte[] reply = ClientAdapter.counterProxy.invokeOrdered(out); 
-        
-        String replyString = convertByteArrayToString(reply);
-        
-        return replyString;
-    }
 
     public String getCurrentTime() {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");

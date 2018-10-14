@@ -42,7 +42,15 @@ public class ClientChat extends javax.swing.JFrame {
         
         System.out.println("Logado como: " + username);
         lblUsername.setText(username);
-        getHistory();
+        
+        
+        GetterHistoryThread getterHistoryThread = new GetterHistoryThread(ClientChat.oClient);
+        GetterUsersThread getterUsersThread = new GetterUsersThread(ClientChat.oClient);
+        
+        this.lblHistoryConversation.setText(getterHistoryThread.history);
+        this.lblUsuariosOnline.setText(getterUsersThread.listUsers);
+        
+        //getHistoryAndUsers();
     }
     
     ClientChat(JTextField txtName) {
@@ -59,7 +67,6 @@ public class ClientChat extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblServidores = new javax.swing.JLabel();
         lblHistoricoConversa = new javax.swing.JLabel();
         lblUsuariosOnline = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
@@ -67,10 +74,8 @@ public class ClientChat extends javax.swing.JFrame {
         lblUsername = new javax.swing.JLabel();
         lblOnlineUsers = new javax.swing.JLabel();
         lblHistoryConversation = new javax.swing.JLabel();
-        lblServers = new javax.swing.JLabel();
         lblOnlineUsersBackground = new javax.swing.JLabel();
         lblHistoryConversationBackground = new javax.swing.JLabel();
-        lblServersBackground = new javax.swing.JLabel();
         pnlEnviar = new javax.swing.JPanel();
         btnSend = new javax.swing.JButton();
         txtInputMessage = new javax.swing.JTextField();
@@ -83,23 +88,17 @@ public class ClientChat extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(null);
 
-        lblServidores.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
-        lblServidores.setForeground(new java.awt.Color(255, 255, 255));
-        lblServidores.setText("Servidores");
-        getContentPane().add(lblServidores);
-        lblServidores.setBounds(60, 110, 100, 16);
-
         lblHistoricoConversa.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         lblHistoricoConversa.setForeground(new java.awt.Color(255, 255, 255));
         lblHistoricoConversa.setText("Histórico de conversa");
         getContentPane().add(lblHistoricoConversa);
-        lblHistoricoConversa.setBounds(300, 110, 186, 22);
+        lblHistoricoConversa.setBounds(190, 110, 186, 22);
 
         lblUsuariosOnline.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         lblUsuariosOnline.setForeground(new java.awt.Color(255, 255, 255));
         lblUsuariosOnline.setText("Usuários Online");
         getContentPane().add(lblUsuariosOnline);
-        lblUsuariosOnline.setBounds(610, 110, 136, 22);
+        lblUsuariosOnline.setBounds(520, 110, 136, 22);
 
         lblTitle.setFont(new java.awt.Font("Copperplate", 1, 48)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
@@ -113,28 +112,25 @@ public class ClientChat extends javax.swing.JFrame {
         lblUsername.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         lblUsername.setForeground(new java.awt.Color(255, 255, 255));
         pnlPrincipal.add(lblUsername);
-        lblUsername.setBounds(670, 440, 90, 20);
+        lblUsername.setBounds(580, 430, 150, 20);
 
+        lblOnlineUsers.setForeground(new java.awt.Color(255, 255, 255));
         lblOnlineUsers.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         pnlPrincipal.add(lblOnlineUsers);
-        lblOnlineUsers.setBounds(555, 16, 190, 390);
+        lblOnlineUsers.setBounds(480, 20, 180, 390);
 
         lblHistoryConversation.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         lblHistoryConversation.setForeground(new java.awt.Color(255, 255, 255));
         lblHistoryConversation.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         pnlPrincipal.add(lblHistoryConversation);
-        lblHistoryConversation.setBounds(220, 20, 310, 380);
-
-        lblServers.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        pnlPrincipal.add(lblServers);
-        lblServers.setBounds(5, 16, 190, 390);
+        lblHistoryConversation.setBounds(100, 20, 320, 380);
 
         lblOnlineUsersBackground.setForeground(new java.awt.Color(255, 255, 255));
         lblOnlineUsersBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/clientchat/background-sides.jpg"))); // NOI18N
         lblOnlineUsersBackground.setText("jLabel1");
         lblOnlineUsersBackground.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.darkGray, java.awt.Color.darkGray, java.awt.Color.darkGray, java.awt.Color.darkGray));
         pnlPrincipal.add(lblOnlineUsersBackground);
-        lblOnlineUsersBackground.setBounds(550, 10, 200, 400);
+        lblOnlineUsersBackground.setBounds(470, 10, 200, 400);
 
         lblHistoryConversationBackground.setBackground(new java.awt.Color(255, 255, 255));
         lblHistoryConversationBackground.setForeground(new java.awt.Color(255, 255, 255));
@@ -142,14 +138,7 @@ public class ClientChat extends javax.swing.JFrame {
         lblHistoryConversationBackground.setText("jLabel1");
         lblHistoryConversationBackground.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.darkGray, java.awt.Color.darkGray, java.awt.Color.darkGray, java.awt.Color.darkGray));
         pnlPrincipal.add(lblHistoryConversationBackground);
-        lblHistoryConversationBackground.setBounds(210, 10, 331, 400);
-
-        lblServersBackground.setForeground(new java.awt.Color(255, 255, 255));
-        lblServersBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/clientchat/background-sides.jpg"))); // NOI18N
-        lblServersBackground.setText("jLabel1");
-        lblServersBackground.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.darkGray, new java.awt.Color(51, 51, 51), java.awt.Color.darkGray, java.awt.Color.darkGray));
-        pnlPrincipal.add(lblServersBackground);
-        lblServersBackground.setBounds(0, 10, 200, 400);
+        lblHistoryConversationBackground.setBounds(90, 10, 340, 400);
 
         pnlEnviar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.darkGray, java.awt.Color.darkGray, java.awt.Color.darkGray, java.awt.Color.darkGray));
 
@@ -181,13 +170,13 @@ public class ClientChat extends javax.swing.JFrame {
         );
 
         pnlPrincipal.add(pnlEnviar);
-        pnlEnviar.setBounds(205, 424, 338, 47);
+        pnlEnviar.setBounds(90, 420, 338, 47);
 
         lblLogadoComo.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         lblLogadoComo.setForeground(new java.awt.Color(255, 255, 255));
         lblLogadoComo.setText("Logado como: ");
         pnlPrincipal.add(lblLogadoComo);
-        lblLogadoComo.setBounds(560, 440, 110, 17);
+        lblLogadoComo.setBounds(470, 430, 110, 17);
 
         getContentPane().add(pnlPrincipal);
         pnlPrincipal.setBounds(20, 140, 755, 477);
@@ -211,21 +200,28 @@ public class ClientChat extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSendActionPerformed
 
     
-    private void getHistory() {
+    private void getHistoryAndUsers() {
         new Thread() {
             
             public void run() {
                 
                 while(true) {
                     try {
-                       String history = ClientChat.oClient.getMessages();
 
-                       lblHistoryConversation.setText(history); 
+                        String history = ClientChat.oClient.getMessages();
+                        lblHistoryConversation.setText(history); 
 
-                   } catch (IOException ex) {
-                       Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
-                   }
-                    
+                        String users = ClientChat.oClient.getUsers();
+                        lblOnlineUsers.setText(users);
+
+                        System.out.println("Vou dormir");
+                        //Thread.sleep(5000);
+                        System.out.println("Acordei");
+                       
+                   }    catch (IOException ex) {
+                        Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
+                    } 
+                     
                     
                 }
             }
@@ -291,9 +287,6 @@ public class ClientChat extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogadoComo;
     private javax.swing.JLabel lblOnlineUsers;
     private javax.swing.JLabel lblOnlineUsersBackground;
-    private javax.swing.JLabel lblServers;
-    private javax.swing.JLabel lblServersBackground;
-    private javax.swing.JLabel lblServidores;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel lblUsuariosOnline;

@@ -15,6 +15,9 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Example replica that implements a BFT replicated service (a counter).
@@ -27,37 +30,43 @@ import java.util.List;
 public final class Server extends DefaultSingleRecoverable  {
     private String historyConversationString = "";
     private String historyConversationStringFormatted = "<html>";
-    private String users = "";
+    private static String usersFormatted = "<html>";
+    private static List<String> listUsers = new ArrayList<String>();
     private int messageCounter = 0;
     private static int BUF_SIZE = 4096;
     private int counter = 0;
+    private static Semaphore semaphore = new Semaphore(2);
     
     public Server(int id) {
+        //clearListUsers();
     	new ServiceReplica(id, this, this);
     }
 
    
-     /**
-     * Este método é responsável por gravar a nova mensagem na sua lista de Mensagens
-     * 
-     */
     @Override
     public byte[] appExecuteOrdered(byte[] command, MessageContext msgCtx) {
         
         try {
-            
             String newMessage = convertByteArrayToString(command);
             
-            
-            
+            // Exemplo de mensagem: send#10:30:35#Vinicius#Oi
             String[] splittedMessage = newMessage.split("#");
             String typeMessage = splittedMessage[0];
+            String currentTime = splittedMessage[1];
+            String username = splittedMessage[2];
+            String message = splittedMessage[3];
+            
+            //Server.semaphore.acquire();
+            if(!Server.listUsers.contains(username)){
+                System.out.println("NOVO USUARIO: " + username);
+                Server.listUsers.add(username);
+                Server.usersFormatted += ("<b>" + username + "</b><br>");
+            }
+            //Server.semaphore.release();
+            
+            //System.out.println(Server.usersFormatted);
             
             if(typeMessage.equals("send")) {
-                String currentTime = splittedMessage[1];
-                String username = splittedMessage[2];
-                String message = splittedMessage[3];
-                                
                 System.out.println("Nova mensagem: " + newMessage);
                 this.messageCounter++;
                 this.historyConversationString += (currentTime + " " + username + ": " + message + "\n");
@@ -78,11 +87,39 @@ public final class Server extends DefaultSingleRecoverable  {
                 return convertStringToByteArray(this.historyConversationStringFormatted + "</html>");
             }
             
-            return null;
+            if(typeMessage.equals("users")) {
+                return convertStringToByteArray(Server.usersFormatted + "</html>");
+            }
+            
+            
         } catch (IOException ex) {
             System.err.println("Invalid request received!");
             return new byte[0];
-        }
+        } 
+        return null;
+    }
+    private void clearListUsers() {
+        new Thread() {
+            
+            public void run() {
+                
+                while(true) {
+                  
+                    //Server.semaphore.acquire();
+
+                    Server.listUsers.clear();
+                    Server.usersFormatted = "<html>";
+                    //Server.semaphore.release();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            
+            
+        }.start();
     }
     
     private String formatHistory(String history) {
