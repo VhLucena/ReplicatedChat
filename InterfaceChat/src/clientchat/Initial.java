@@ -43,15 +43,13 @@ public class Initial extends javax.swing.JFrame {
         setTitle("Replicated Chat");
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         setName("Replicated Chat"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(500, 300));
-        setResizable(false);
         getContentPane().setLayout(null);
 
         lblInsertYourName.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         lblInsertYourName.setForeground(new java.awt.Color(255, 255, 255));
         lblInsertYourName.setText("Digite seu nome:");
         getContentPane().add(lblInsertYourName);
-        lblInsertYourName.setBounds(100, 130, 160, 16);
+        lblInsertYourName.setBounds(10, 120, 250, 30);
 
         txtName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,7 +57,7 @@ public class Initial extends javax.swing.JFrame {
             }
         });
         getContentPane().add(txtName);
-        txtName.setBounds(260, 120, 130, 30);
+        txtName.setBounds(260, 120, 140, 30);
 
         btnEnter.setText("Entrar");
         btnEnter.addActionListener(new java.awt.event.ActionListener() {

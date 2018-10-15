@@ -60,7 +60,7 @@ public class ClientAdapter {
      */
     public synchronized String sendMessage(String newMessage) throws IOException {
         try {
-            String currentTime = getCurrentTime();
+            String currentTime = getCurrentTime("HH:mm:ss");
             // FORMATO DA MENSAGEM: [send#8:55:30#nomeCliente#mensagem]
             String newPackage = "send#"+ currentTime + "#" + ClientAdapter.name + "#" + newMessage;
             
@@ -78,6 +78,39 @@ public class ClientAdapter {
         return null;
     }
     
+    public synchronized String sendMessageUltraPrecision(String newMessage) throws IOException {
+        try {
+            String currentTime = getCurrentTime("HH:mm:ss.S");
+            // FORMATO DA MENSAGEM: [send#8:55:30#nomeCliente#mensagem]
+            String newPackage = "send#"+ currentTime + "#" + ClientAdapter.name + "#" + newMessage;
+            
+            byte[] out = convertStringToByteArray(newPackage);
+
+            byte[] reply = ClientAdapter.counterProxy.invokeOrdered(out); 
+
+            if(reply == null)   
+                return "Erro no envio da mensagem";
+
+            return "OK";
+        } catch(IOException | NumberFormatException e) {
+            ClientAdapter.counterProxy.close();
+        }
+        return null;
+    }
+    
+    public synchronized String getMessagesFormatted() throws IOException {
+        // FORMATO DA MENSAGE: history#-#Vinicius#-
+        String newPackage = "historyFormatted#-#" + ClientAdapter.name + "#-";
+        
+        byte[] out = convertStringToByteArray(newPackage);
+        
+        byte[] reply = ClientAdapter.counterProxy.invokeOrdered(out); 
+        
+        String replyString = convertByteArrayToString(reply);
+                
+        return replyString;
+    }
+    
     public synchronized String getMessages() throws IOException {
         // FORMATO DA MENSAGE: history#-#Vinicius#-
         String newPackage = "history#-#" + ClientAdapter.name + "#-";
@@ -89,7 +122,7 @@ public class ClientAdapter {
         String replyString = convertByteArrayToString(reply);
                 
         return replyString;
-    }
+    }   
     
     public synchronized String getUsers() throws IOException {
         // FORMATO DA MENSAGE: users#-#Vinicius#-
@@ -105,10 +138,10 @@ public class ClientAdapter {
     }
     
 
-    public String getCurrentTime() {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    private String getCurrentTime(String precision) {
+        DateFormat dateFormat = new SimpleDateFormat(precision);
 	Date date = new Date();
-	return dateFormat.format(date);
+	return dateFormat.format(date).replace('.', ':');
     }
     
     private String convertByteArrayToString(byte[] byteArrayValue) throws IOException{

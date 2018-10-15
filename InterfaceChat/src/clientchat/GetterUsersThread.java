@@ -29,7 +29,10 @@ public class GetterUsersThread implements Runnable {
         while(true){
             try {
                 this.listUsers = GetterUsersThread.clientAdapter.getUsers();
+                Thread.sleep(1700);
             } catch (IOException ex) {
+                Logger.getLogger(GetterUsersThread.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
                 Logger.getLogger(GetterUsersThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

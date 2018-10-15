@@ -84,29 +84,33 @@ public class ClientChat extends javax.swing.JFrame {
 
         lblHistoricoConversa.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         lblHistoricoConversa.setForeground(new java.awt.Color(255, 255, 255));
+        lblHistoricoConversa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblHistoricoConversa.setText("Histórico de conversa");
         getContentPane().add(lblHistoricoConversa);
-        lblHistoricoConversa.setBounds(190, 110, 186, 22);
+        lblHistoricoConversa.setBounds(106, 110, 340, 22);
 
         lblUsuariosOnline.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         lblUsuariosOnline.setForeground(new java.awt.Color(255, 255, 255));
+        lblUsuariosOnline.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblUsuariosOnline.setText("Usuários Online");
         getContentPane().add(lblUsuariosOnline);
-        lblUsuariosOnline.setBounds(520, 110, 136, 22);
+        lblUsuariosOnline.setBounds(496, 110, 190, 22);
 
         lblTitle.setFont(new java.awt.Font("Copperplate", 1, 48)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTitle.setText("Replicated Chat");
         getContentPane().add(lblTitle);
-        lblTitle.setBounds(170, 30, 440, 28);
+        lblTitle.setBounds(110, 30, 580, 28);
 
         pnlPrincipal.setOpaque(false);
         pnlPrincipal.setLayout(null);
 
         lblUsername.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         lblUsername.setForeground(new java.awt.Color(255, 255, 255));
+        lblUsername.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         pnlPrincipal.add(lblUsername);
-        lblUsername.setBounds(580, 430, 150, 20);
+        lblUsername.setBounds(580, 430, 180, 20);
 
         lblOnlineUsers.setForeground(new java.awt.Color(255, 255, 255));
         lblOnlineUsers.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -168,9 +172,10 @@ public class ClientChat extends javax.swing.JFrame {
 
         lblLogadoComo.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         lblLogadoComo.setForeground(new java.awt.Color(255, 255, 255));
+        lblLogadoComo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblLogadoComo.setText("Logado como: ");
         pnlPrincipal.add(lblLogadoComo);
-        lblLogadoComo.setBounds(470, 430, 110, 17);
+        lblLogadoComo.setBounds(440, 430, 140, 17);
 
         getContentPane().add(pnlPrincipal);
         pnlPrincipal.setBounds(20, 140, 755, 477);

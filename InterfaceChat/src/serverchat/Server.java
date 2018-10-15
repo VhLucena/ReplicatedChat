@@ -30,12 +30,10 @@ import java.util.logging.Logger;
 public final class Server extends DefaultSingleRecoverable  {
     private String historyConversationString = "";
     private String historyConversationStringFormatted = "<html>";
-    private static String usersFormatted = "<html>";
-    private static List<String> listUsers = new ArrayList<String>();
-    private int messageCounter = 0;
+    private String usersFormatted = "<html>";
+    private List<String> listUsers = new ArrayList<String>();
+    public int messageCounter = 0;
     private static int BUF_SIZE = 4096;
-    private int counter = 0;
-    private static Semaphore semaphore = new Semaphore(2);
     
     public Server(int id) {
         //clearListUsers();
@@ -48,7 +46,7 @@ public final class Server extends DefaultSingleRecoverable  {
         
         try {
             String newMessage = convertByteArrayToString(command);
-            
+
             // Exemplo de mensagem: send#10:30:35#Vinicius#Oi
             String[] splittedMessage = newMessage.split("#");
             String typeMessage = splittedMessage[0];
@@ -56,13 +54,11 @@ public final class Server extends DefaultSingleRecoverable  {
             String username = splittedMessage[2];
             String message = splittedMessage[3];
             
-            //Server.semaphore.acquire();
-            if(!Server.listUsers.contains(username)){
+            if(!this.listUsers.contains(username)){
                 System.out.println("NOVO USUARIO: " + username);
-                Server.listUsers.add(username);
-                Server.usersFormatted += ("<b>" + username + "</b><br>");
+                this.listUsers.add(username);
+                this.usersFormatted += ("<b>" + username + "</b><br>");
             }
-            //Server.semaphore.release();
             
             //System.out.println(Server.usersFormatted);
             
@@ -83,12 +79,16 @@ public final class Server extends DefaultSingleRecoverable  {
                 return null;
             }
             
-            if(typeMessage.equals("history")) {
+            if(typeMessage.equals("historyFormatted")) {
                 return convertStringToByteArray(this.historyConversationStringFormatted + "</html>");
             }
             
+            if(typeMessage.equals("history")) {
+                return convertStringToByteArray(this.historyConversationString);
+            }
+            
             if(typeMessage.equals("users")) {
-                return convertStringToByteArray(Server.usersFormatted + "</html>");
+                return convertStringToByteArray(this.usersFormatted + "</html>");
             }
             
             
@@ -98,7 +98,10 @@ public final class Server extends DefaultSingleRecoverable  {
         } 
         return null;
     }
+
+    
     private void clearListUsers() {
+        /*
         new Thread() {
             
             public void run() {
@@ -120,6 +123,7 @@ public final class Server extends DefaultSingleRecoverable  {
             
             
         }.start();
+        */
     }
     
     private String formatHistory(String history) {
@@ -149,7 +153,11 @@ public final class Server extends DefaultSingleRecoverable  {
         try {
             ByteArrayInputStream bis = new ByteArrayInputStream(state);
             ObjectInput in = new ObjectInputStream(bis);
-            counter = in.readInt();
+            
+            messageCounter = in.readInt();
+            historyConversationString = in.readUTF();
+            historyConversationStringFormatted = in.readUTF();
+
             in.close();
             bis.close();
         } catch (IOException e) {
@@ -163,7 +171,11 @@ public final class Server extends DefaultSingleRecoverable  {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(bos);
-            out.writeInt(counter);
+            
+            out.writeInt(messageCounter);
+            out.writeUTF(historyConversationString);
+            out.writeUTF(historyConversationStringFormatted);
+            
             out.flush();
             bos.flush();
             out.close();

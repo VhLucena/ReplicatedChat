@@ -28,8 +28,12 @@ public class GetterHistoryThread implements Runnable {
         System.out.println("GetterHistory iniciado.");
         while(true) {
             try {
-                this.history = GetterHistoryThread.clientAdapter.getMessages();
+                this.history = GetterHistoryThread.clientAdapter.getMessagesFormatted();
+                Thread.sleep(500);
             } catch (IOException ex) {
+                Logger.getLogger(GetterHistoryThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            catch (InterruptedException ex) {
                 Logger.getLogger(GetterHistoryThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
