@@ -20,18 +20,18 @@ public class GetterHistoryThread implements Runnable {
     
     GetterHistoryThread(ClientAdapter clientAdapter) {
         GetterHistoryThread.clientAdapter = clientAdapter;
-        System.out.println("GetterHistory iniciado");
         new Thread(this, "GetterHistory").start();
     }
 
     @Override
     public void run() {
-        System.out.println("Metodo Run chamado");
-        try {
-            this.history = GetterHistoryThread.clientAdapter.getMessages();
-            System.out.println("Recebi: " + this.history);
-        } catch (IOException ex) {
-            Logger.getLogger(GetterHistoryThread.class.getName()).log(Level.SEVERE, null, ex);
+        System.out.println("GetterHistory iniciado.");
+        while(true) {
+            try {
+                this.history = GetterHistoryThread.clientAdapter.getMessages();
+            } catch (IOException ex) {
+                Logger.getLogger(GetterHistoryThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

@@ -43,14 +43,8 @@ public class ClientChat extends javax.swing.JFrame {
         System.out.println("Logado como: " + username);
         lblUsername.setText(username);
         
-        
-        GetterHistoryThread getterHistoryThread = new GetterHistoryThread(ClientChat.oClient);
-        GetterUsersThread getterUsersThread = new GetterUsersThread(ClientChat.oClient);
-        
-        this.lblHistoryConversation.setText(getterHistoryThread.history);
-        this.lblUsuariosOnline.setText(getterUsersThread.listUsers);
-        
-        //getHistoryAndUsers();
+        System.out.println("Iniciando Threads");
+        startThreadsHistoryAndUsers();
     }
     
     ClientChat(JTextField txtName) {
@@ -200,29 +194,17 @@ public class ClientChat extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSendActionPerformed
 
     
-    private void getHistoryAndUsers() {
+    private void startThreadsHistoryAndUsers() {
         new Thread() {
             
             public void run() {
                 
+                GetterHistoryThread getterHistoryThread = new GetterHistoryThread(ClientChat.oClient);
+                GetterUsersThread getterUsersThread = new GetterUsersThread(ClientChat.oClient);
+
                 while(true) {
-                    try {
-
-                        String history = ClientChat.oClient.getMessages();
-                        lblHistoryConversation.setText(history); 
-
-                        String users = ClientChat.oClient.getUsers();
-                        lblOnlineUsers.setText(users);
-
-                        System.out.println("Vou dormir");
-                        //Thread.sleep(5000);
-                        System.out.println("Acordei");
-                       
-                   }    catch (IOException ex) {
-                        Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
-                     
-                    
+                    lblHistoryConversation.setText(getterHistoryThread.history);
+                    lblOnlineUsers.setText(getterUsersThread.listUsers);
                 }
             }
             

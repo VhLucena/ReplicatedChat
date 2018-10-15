@@ -25,12 +25,13 @@ public class GetterUsersThread implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("GetterUsers iniciado");
-        
-        try {
-            this.listUsers = GetterUsersThread.clientAdapter.getUsers();
-        } catch (IOException ex) {
-            Logger.getLogger(GetterUsersThread.class.getName()).log(Level.SEVERE, null, ex);
+        System.out.println("GetterUsers iniciado.");
+        while(true){
+            try {
+                this.listUsers = GetterUsersThread.clientAdapter.getUsers();
+            } catch (IOException ex) {
+                Logger.getLogger(GetterUsersThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
